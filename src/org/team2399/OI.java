@@ -2,6 +2,7 @@ package org.team2399;
 
 import org.team2399.buttons.Button;
 import org.team2399.buttons.JoystickButton;
+import org.team2399.command.Command;
 
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -11,23 +12,75 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class OI {
 
-	private final Joystick DTLeftStick = new Joystick(0);
-	private final Joystick DTRightStick = new Joystick(1);
+	public enum DriveMode {
+		STANDARD, INVERTED, DEADBAND
+	}
 
-	private final Button DTLeftTrigger = new JoystickButton(DTLeftStick, 0);
+	private class RotateDriveModeCommand extends Command {
 
-	private final Button DTRightTrigger = new JoystickButton(DTLeftStick, 0);
+		@Override
+		protected void execute() {
+			OI.this.rotateDriveMode();
+		}
+
+		@Override
+		protected boolean isFinished() {
+			return true;
+		}
+
+	}
+
+	private final Joystick driverLeftStick = new Joystick(0);
+	private final Joystick driverRightStick = new Joystick(1);
+
+	private final Button driverLeftTrigger = new JoystickButton(driverLeftStick, 0);
+	private final Button driverLeftSqueeze = new JoystickButton(driverLeftStick, 2);
+
+	private final Button driverRightTrigger = new JoystickButton(driverRightStick, 0);
+
+	private DriveMode driveMode = DriveMode.STANDARD;
 
 	public OI() {
-		// TODO Auto-generated constructor stub
+		driverLeftSqueeze.whenPressed(new RotateDriveModeCommand());
+	}
+
+	public DriveMode getDriveMode() {
+		return driveMode;
+	}
+
+	public void setDriveMode(DriveMode dm) {
+		driveMode = dm;
+	}
+
+	public void rotateDriveMode() {
+		driveMode = DriveMode.values()[(driveMode.ordinal() + 1) % 3];
+	}
+
+	private static double applyDriveMode(double input, DriveMode dm) {
+		switch (dm) {
+		case DEADBAND:
+			return (Math.abs(input) > 0.1 ? input : 0);
+		case INVERTED:
+			return input;
+		case STANDARD:
+		default:
+			return -input;
+		}
 	}
 
 	public double getDTLeftInput() {
-		return -DTLeftStick.getY();
+		return applyDriveMode(driverLeftStick.getY(), this.driveMode);
 	}
 
 	public double getDTRightInput() {
-		return -DTRightStick.getY();
+		return applyDriveMode(driverRightStick.getY(), this.driveMode);
 	}
 
+	public void whileDTLeftBrake(Command c) {
+		driverLeftTrigger.whileHeld(c);
+	}
+
+	public void whileDTRightBrake(Command c) {
+		driverRightTrigger.whileHeld(c);
+	}
 }

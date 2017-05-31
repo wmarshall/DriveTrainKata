@@ -2,6 +2,7 @@
 package org.team2399;
 
 import org.team2399.command.Scheduler;
+import org.team2399.commands.Brake;
 import org.team2399.commands.DriveLinear;
 import org.team2399.subsystems.DriveTrainSide;
 
@@ -33,6 +34,9 @@ public class Robot extends IterativeRobot {
 		rightDT = new DriveTrainSide("RightDT", new CANTalon(0xbeef), false);
 		S.registerSubsystem(leftDT, DriveLinear.generator(leftDT, oi::getDTLeftInput));
 		S.registerSubsystem(rightDT, DriveLinear.generator(leftDT, oi::getDTRightInput));
+
+		oi.whileDTLeftBrake(new Brake(leftDT));
+		oi.whileDTRightBrake(new Brake(rightDT));
 	}
 
 	/**

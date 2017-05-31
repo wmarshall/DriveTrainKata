@@ -17,11 +17,11 @@ public class DriveLinear extends Command {
 		// return DriveLinear::new(side, source);
 	}
 
-	private DriveLinear(DriveTrainSide side, DoubleSupplier source) {
+	public DriveLinear(DriveTrainSide side, DoubleSupplier source) {
 		this("NAME", -1, side, source);
 	}
 
-	private DriveLinear(String name, DriveTrainSide side, DoubleSupplier source) {
+	public DriveLinear(String name, DriveTrainSide side, DoubleSupplier source) {
 		this(name, -1, side, source);
 	}
 
