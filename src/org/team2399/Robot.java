@@ -31,8 +31,8 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		leftDT = new DriveTrainSide("LeftDT", new CANTalon(0xdead), false);
 		rightDT = new DriveTrainSide("RightDT", new CANTalon(0xbeef), false);
-		S.registerSubsystem(leftDT, DriveLinear.generator(leftDT, oi.getDTLeftSupplier()));
-		S.registerSubsystem(rightDT, DriveLinear.generator(leftDT, oi.getDTRightSupplier()));
+		S.registerSubsystem(leftDT, DriveLinear.generator(leftDT, oi::getDTLeftInput));
+		S.registerSubsystem(rightDT, DriveLinear.generator(leftDT, oi::getDTRightInput));
 	}
 
 	/**

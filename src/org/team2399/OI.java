@@ -1,7 +1,5 @@
 package org.team2399;
 
-import java.util.function.DoubleSupplier;
-
 import org.team2399.buttons.Button;
 import org.team2399.buttons.JoystickButton;
 
@@ -24,12 +22,12 @@ public class OI {
 		// TODO Auto-generated constructor stub
 	}
 
-	public DoubleSupplier getDTLeftSupplier() {
-		return () -> DTLeftStick.getY();
+	public double getDTLeftInput() {
+		return -DTLeftStick.getY();
 	}
 
-	public DoubleSupplier getDTRightSupplier() {
-		return () -> DTRightStick.getY();
+	public double getDTRightInput() {
+		return -DTRightStick.getY();
 	}
 
 }
